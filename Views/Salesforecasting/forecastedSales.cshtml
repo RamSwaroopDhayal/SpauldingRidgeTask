@@ -1,0 +1,116 @@
+﻿<html ng-app="forecastedMod">
+<head>
+    <title>Forecasted Sales</title>
+    <script src="~/Scripts/Salesclint.js"></script>
+    <script type="text/javascript">
+        function tableToCSV() {
+            // Variable to store the final csv data
+            var csv_data = [];
+            // Get each row data
+            var rows = document.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                // Get each column data
+                var cols = rows[i].querySelectorAll('td,th');
+
+                // Stores each csv row data
+                var csvrow = [];
+                for (var j = 0; j < cols.length; j++) {
+
+                    // Get the text data of each cell
+                    // of a row and push it to csvrow
+                    csvrow.push(cols[j].innerHTML);
+                }
+
+                // Combine each column value with comma
+                csv_data.push(csvrow.join(","));
+            }
+
+            // Combine each row data with new line character
+            csv_data = csv_data.join('\n');
+
+            // Call this function to download csv file
+            downloadCSVFile(csv_data);
+
+        }
+        function downloadCSVFile(csv_data) {
+
+            // Create CSV file object and feed
+            // our csv_data into it
+            CSVFile = new Blob([csv_data], {
+                type: "text/csv"
+            });
+
+            // Create to temporary link to initiate
+            // download process
+            var temp_link = document.createElement('a');
+
+            // Download csv file
+            temp_link.download = "Forecasted_sales.csv";
+            var url = window.URL.createObjectURL(CSVFile);
+            temp_link.href = url;
+
+            // This link should not be displayed
+            temp_link.style.display = "none";
+            document.body.appendChild(temp_link);
+
+            // Automatically click the link to
+            // trigger download
+            temp_link.click();
+            document.body.removeChild(temp_link);
+        }
+    </script>
+
+</head>
+<body ng-controller="forecastedcont">
+
+    <h2>Forecasted Sales</h2>
+    <br />
+    <label>Total Forecasted Sales of Selected Year =</label> {{Total_forecasted_sales_Year}}
+    <br />
+    <div class="col-lg-12">
+        <h4>Search State wise Data</h4>
+        <div class="col-lg-4">
+            <label>State:</label>
+            <select ng-model="State" ng-init="State='0'">
+                <option value="0">Select State</option>
+                <option ng-repeat="item in statelist" value="{{item.State}}">{{item.State}}</option>
+            </select>
+        </div>
+        <div class="col-lg-4" ng-show="State !='0'">
+            <label> Enter Percentage:</label>
+            <input type="number" ng-model="Forecast_Percentage" />
+        </div>
+        <div class="col-lg-4" ng-show="State !='0'">
+            <input type="button" class="btn btn-success float-right" ng-click="OnChanges_State_Data(State)" value="Search">
+        </div>
+    </div>
+    <br />&nbsp;
+    <br />
+    <div>
+        <h4 style="padding:4px">Total forecasted Sales by State:</h4>
+        <div class="d-flex align-items-center">
+            <input type="button" class="btn btn-success float-right" onclick="tableToCSV()" value="Export to CSV">
+        </div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>State</th>
+                        <th>Percentage increase</th>
+                        <th>Total sales</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="Item in Total_forecasted_sales_State">
+                    <td>{{Item.State}}</td>
+                    <td>{{Item.Percentage_increase}}</td>
+                    <td>{{Item.Total_Sales}}</td>
+                </tr>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
+

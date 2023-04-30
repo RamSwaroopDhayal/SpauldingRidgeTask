@@ -1,0 +1,64 @@
+﻿
+<html ng-app="SalesMod">
+<head>
+    <title>Total Sales</title>
+    <script src="~/Scripts/Salesclint.js"></script>
+</head>
+<body ng-controller="Salescont">
+    <h2>Total Sales</h2>
+    <div class="col-lg-12">
+        <div class="form-group">
+            <label for="">Please Choose Year:</label>
+            <select class="form-control" ng-model="Year" ng-init="Year='0'">
+                <option value="0">Select</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+            </select>
+        </div>
+        <button class="btn btn-success float-right" ng-click="GetSalesData()">Search</button>
+    </div>&nbsp;
+    <br />&nbsp;
+    <label ng-show="show_Deatils">Total Sales Of Year =</label> {{Total_sales_Of_Year}}
+    <br />&nbsp;
+    <div ng-show="show_Deatils">
+        &nbsp;&nbsp;<h3>Search forecasted year sales :</h3><br />
+        <label>Enter Percentage :</label>
+        <input type="number" ng-model="forecasted_percentage" />
+        <button class="btn btn-success float-right" ng-click="Get_forecasted_SalesData()">Search</button>
+    </div>
+    <br />&nbsp;
+    <br />
+    <label ng-show="show_Deatils">Total Sales by State:</label>
+    <div ng-show="show_Deatils">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>State</th>
+                    <th>Total sales</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="Item in Total_sales_State track by $index">
+                <td>{{$index+1}}</td>
+                <td>{{Item.State}}</td>
+                <td>{{Item.Total_Sales}}</td>
+            </tr>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
